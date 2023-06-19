@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "554841982231",
+    "project_id": "maxway-ba603",
+    "storage_bucket": "maxway-ba603.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:554841982231:android:9342577b7bcea893c62352",
+        "android_client_info": {
+          "package_name": "uz.gita.dima.mymaxway"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "554841982231-f5leo15kicjh59f3ig590khorl3457dk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFHpQENXVOGwucWSZjidBSz7mkF8n2AR8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "554841982231-f5leo15kicjh59f3ig590khorl3457dk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:554841982231:android:c37233b432d52475c62352",
+        "android_client_info": {
+          "package_name": "uz.gita.dimaa.mymaxway"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "554841982231-09fmofbji7bssaj7f2t8hgceg7giqc0r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uz.gita.dimaa.mymaxway",
+            "certificate_hash": "0a44d6cff219eeaf1acae61dac92c272ded4ebc1"
+          }
+        },
+        {
+          "client_id": "554841982231-f5leo15kicjh59f3ig590khorl3457dk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFHpQENXVOGwucWSZjidBSz7mkF8n2AR8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "554841982231-f5leo15kicjh59f3ig590khorl3457dk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
