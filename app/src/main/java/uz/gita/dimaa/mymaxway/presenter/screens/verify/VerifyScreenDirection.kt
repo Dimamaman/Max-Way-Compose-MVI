@@ -8,6 +8,6 @@ class VerifyScreenDirection @Inject constructor(
     private val appNavigator: AppNavigator
 ): VerifyScreenContract.Direction {
     override suspend fun openMainScreen() {
-        appNavigator.navigateTo(MainScreen())
+        appNavigator.replace(MainScreen())
     }
 }

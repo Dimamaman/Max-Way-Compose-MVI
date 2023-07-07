@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "554841982231",
-    "project_id": "maxway-ba603",
-    "storage_bucket": "maxway-ba603.appspot.com"
+    "project_number": "626982420143",
+    "project_id": "mazali-7c96f",
+    "storage_bucket": "mazali-7c96f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:554841982231:android:9342577b7bcea893c62352",
+        "mobilesdk_app_id": "1:626982420143:android:f3cdc5de08d6e495e8de5a",
         "android_client_info": {
-          "package_name": "uz.gita.dima.mymaxway"
+          "package_name": "uz.gita.dima.mazali"
         }
       },
       "oauth_client": [
         {
-          "client_id": "554841982231-f5leo15kicjh59f3ig590khorl3457dk.apps.googleusercontent.com",
+          "client_id": "626982420143-nim61d42d4qv7fdjglabg0qik4jr8l4j.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAFHpQENXVOGwucWSZjidBSz7mkF8n2AR8"
+          "current_key": "AIzaSyDJ_bBEQHWpSjISjUp3K3KIJ7ZjaYpoha8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "554841982231-f5leo15kicjh59f3ig590khorl3457dk.apps.googleusercontent.com",
+              "client_id": "626982420143-nim61d42d4qv7fdjglabg0qik4jr8l4j.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -36,35 +36,27 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:554841982231:android:c37233b432d52475c62352",
+        "mobilesdk_app_id": "1:626982420143:android:ed670c39e139b690e8de5a",
         "android_client_info": {
           "package_name": "uz.gita.dimaa.mymaxway"
         }
       },
       "oauth_client": [
         {
-          "client_id": "554841982231-09fmofbji7bssaj7f2t8hgceg7giqc0r.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "uz.gita.dimaa.mymaxway",
-            "certificate_hash": "0a44d6cff219eeaf1acae61dac92c272ded4ebc1"
-          }
-        },
-        {
-          "client_id": "554841982231-f5leo15kicjh59f3ig590khorl3457dk.apps.googleusercontent.com",
+          "client_id": "626982420143-nim61d42d4qv7fdjglabg0qik4jr8l4j.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAFHpQENXVOGwucWSZjidBSz7mkF8n2AR8"
+          "current_key": "AIzaSyDJ_bBEQHWpSjISjUp3K3KIJ7ZjaYpoha8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "554841982231-f5leo15kicjh59f3ig590khorl3457dk.apps.googleusercontent.com",
+              "client_id": "626982420143-nim61d42d4qv7fdjglabg0qik4jr8l4j.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

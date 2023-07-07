@@ -1,4 +1,4 @@
-package uz.gita.dimaa.mymaxway.domain.repository
+package uz.gita.dimaa.mymaxway.domain.repository.auth
 
 import android.app.Activity
 import com.google.firebase.FirebaseException
@@ -10,6 +10,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import uz.gita.dimaa.mymaxway.data.locale.SharedPref
+import uz.gita.dimaa.mymaxway.domain.repository.auth.AuthRepository
 import uz.gita.dimaa.mymaxway.util.myLog
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

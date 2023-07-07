@@ -9,7 +9,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.viewmodel.container
 import uz.gita.dimaa.mymaxway.data.locale.SharedPref
-import uz.gita.dimaa.mymaxway.domain.repository.AuthRepository
+import uz.gita.dimaa.mymaxway.domain.repository.auth.AuthRepository
 import uz.gita.dimaa.mymaxway.util.myLog
 import javax.inject.Inject
 

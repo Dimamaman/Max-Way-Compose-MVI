@@ -13,4 +13,7 @@ val Pink40 = Color(0xFF7D5260)
 
 val PinkColor = Color(0xFF4F277A)
 val SkinColor = Color(0xFFC7B5AF)
-val LightGrayColor = Color(0xFFA8A8A8)
+val LightGrayColor = Color(0xFFF1F1F1)
+val DialogColor = Color(0xFFE2ECF3)
+
+val dark_grey = Color(0xFF818C99)

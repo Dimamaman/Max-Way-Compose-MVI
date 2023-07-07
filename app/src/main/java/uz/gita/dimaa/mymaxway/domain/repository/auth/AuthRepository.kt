@@ -1,4 +1,4 @@
-package uz.gita.dimaa.mymaxway.domain.repository
+package uz.gita.dimaa.mymaxway.domain.repository.auth
 
 import android.app.Activity
 import kotlinx.coroutines.flow.Flow

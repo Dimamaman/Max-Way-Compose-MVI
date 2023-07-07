@@ -7,10 +7,10 @@ import javax.inject.Inject
 
 class SplashScreenDirection @Inject constructor(private val appNavigator: AppNavigator): Direction {
     override suspend fun openMainScreen() {
-        appNavigator.navigateTo(MainScreen())
+        appNavigator.replace(MainScreen())
     }
 
     override suspend fun openLoginScreen() {
-        appNavigator.navigateTo(LoginScreen())
+        appNavigator.replace(LoginScreen())
     }
 }
