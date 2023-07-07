@@ -8,6 +8,8 @@ import uz.gita.dimaa.mymaxway.domain.repository.auth.AuthRepository
 import uz.gita.dimaa.mymaxway.domain.repository.auth.AuthRepositoryImpl
 import uz.gita.dimaa.mymaxway.domain.repository.firebase.FirebaseRepository
 import uz.gita.dimaa.mymaxway.domain.repository.firebase.FirebaseRepositoryImpl
+import uz.gita.dimaa.mymaxway.domain.repository.roomrepository.RoomRepository
+import uz.gita.dimaa.mymaxway.domain.repository.roomrepository.RoomRepositoryImpl
 
 
 @Module
@@ -20,4 +22,7 @@ interface RepositoryModule {
 
     @Binds
     fun bindFirebaseRepository(impl: FirebaseRepositoryImpl): FirebaseRepository
+
+    @Binds
+    fun bindRoomRepository(impl: RoomRepositoryImpl): RoomRepository
 }

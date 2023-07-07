@@ -99,4 +99,9 @@ dependencies {
     // MVI orbit
     implementation 'org.orbit-mvi:orbit-viewmodel:4.6.1'
     implementation 'org.orbit-mvi:orbit-compose:4.6.1'
+
+    // Room
+    implementation 'androidx.room:room-runtime:2.5.1'
+    implementation 'androidx.room:room-ktx:2.5.1'
+    kapt 'androidx.room:room-compiler:2.5.1'
 }

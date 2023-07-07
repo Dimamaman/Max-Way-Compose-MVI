@@ -1,17 +1,18 @@
 package uz.gita.dimaa.mymaxway.domain.usecase.impl
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import uz.gita.dimaa.mymaxway.data.model.Category
-import uz.gita.dimaa.mymaxway.data.model.Food
+import kotlinx.coroutines.flow.*
+import uz.gita.dimaa.mymaxway.data.local.room.entity.FoodEntity
+import uz.gita.dimaa.mymaxway.data.model.OrderData
+import uz.gita.dimaa.mymaxway.domain.model.FoodData
 import uz.gita.dimaa.mymaxway.domain.repository.firebase.FirebaseRepository
+import uz.gita.dimaa.mymaxway.domain.repository.roomrepository.RoomRepository
 import uz.gita.dimaa.mymaxway.domain.usecase.HomeUseCase
 import javax.inject.Inject
 
 class HomeUseCaseImpl @Inject constructor(
-    private val repository: FirebaseRepository
+    private val repository: FirebaseRepository,
+    private val roomRepository: RoomRepository
 ) : HomeUseCase {
     override fun getCategories(): Flow<Result<List<String>>> = flow<Result<List<String>>> {
         val resultList = arrayListOf<String>()
@@ -25,7 +26,23 @@ class HomeUseCaseImpl @Inject constructor(
         emit(Result.success(resultList))
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun getFoods(): Result<List<Food>> {
+    override  fun addOrders(orderData: OrderData): Flow<Result<String>> {
+        return repository.addOrders(orderData)
+    }
+
+    override suspend fun getFoods(): Result<List<FoodData>> {
         return repository.getAllFoods()
+    }
+
+    override fun getFoodsFromRoom(): Flow<List<FoodEntity>> {
+        return roomRepository.getFoods()
+    }
+
+    override fun add(food: FoodData, count: Int) {
+        roomRepository.add(food,count)
+    }
+
+    override fun updateFood(foodEntity: FoodEntity, count: Int) {
+        roomRepository.updateFood(foodEntity, count)
     }
 }

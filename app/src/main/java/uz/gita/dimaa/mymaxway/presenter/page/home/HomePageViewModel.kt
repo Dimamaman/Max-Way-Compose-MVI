@@ -15,8 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
-    private val direction: HomeContract.Direction,
-    private val homeUseCase: HomeUseCase
+    private val homeUseCase: HomeUseCase,
 ): HomeContract.ViewModel, ViewModel(){
     override val container = container<HomeContract.UIState, HomeContract.SideEffect>(HomeContract.UIState())
 
@@ -56,10 +55,8 @@ class HomePageViewModel @Inject constructor(
 
             }
 
-            is HomeContract.Intent.OpenDetailsDialog -> {
-                viewModelScope.launch {
-                    direction.openDialog(intent.food)
-                }
+            is HomeContract.Intent.Add -> {
+                homeUseCase.add(intent.food, intent.count)
             }
         }
     }

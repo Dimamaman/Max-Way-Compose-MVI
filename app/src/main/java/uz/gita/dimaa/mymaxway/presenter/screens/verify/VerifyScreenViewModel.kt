@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.onEach
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.viewmodel.container
-import uz.gita.dimaa.mymaxway.data.locale.SharedPref
+import uz.gita.dimaa.mymaxway.data.local.sharedPref.SharedPref
 import uz.gita.dimaa.mymaxway.domain.repository.auth.AuthRepository
 import javax.inject.Inject
 

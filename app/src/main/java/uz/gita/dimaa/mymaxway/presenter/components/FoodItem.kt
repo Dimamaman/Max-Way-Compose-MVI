@@ -16,13 +16,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import uz.gita.dimaa.mymaxway.data.model.Food
+import uz.gita.dimaa.mymaxway.domain.model.FoodData
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun FoodItem(
-    food: Food,
-    onClick: (Food) -> Unit
+    food: FoodData,
+    onClick: (FoodData) -> Unit
 ) {
     Card(
         modifier = Modifier

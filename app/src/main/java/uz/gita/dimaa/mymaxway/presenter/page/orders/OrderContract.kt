@@ -1,20 +1,17 @@
-package uz.gita.dimaa.mymaxway.presenter.page.home
+package uz.gita.dimaa.mymaxway.presenter.page.orders
 
 import kotlinx.coroutines.flow.StateFlow
 import org.orbitmvi.orbit.ContainerHost
-import uz.gita.dimaa.mymaxway.domain.model.FoodData
+import uz.gita.dimaa.mymaxway.data.local.room.entity.FoodEntity
 
-interface HomeContract {
+interface OrderContract {
     sealed interface Intent {
         object Loading: Intent
-        data class Search(val search: String): Intent
-        data class Add(val food: FoodData, val count: Int): Intent
+        data class Change(val foodEntity: FoodEntity, val count: Int): Intent
+        data class Comment(val message: String, val allPrice:Long): Intent
     }
 
-    data class UIState(
-        val foods: List<FoodData> = emptyList(),
-        val categories: List<String> = emptyList()
-    )
+    data class UIState(val foods: List<FoodEntity> = emptyList())
 
     sealed interface SideEffect {
         data class HasError(val message: String): SideEffect

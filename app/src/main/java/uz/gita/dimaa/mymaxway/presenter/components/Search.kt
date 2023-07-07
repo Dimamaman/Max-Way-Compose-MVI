@@ -24,7 +24,6 @@ fun CustomSearchView(
     Box(
         modifier = modifier
             .padding(top = 8.dp)
-            .fillMaxWidth()
             .height(50.dp)
             .padding(horizontal = 10.dp)
             .clip(RoundedCornerShape(8.dp))

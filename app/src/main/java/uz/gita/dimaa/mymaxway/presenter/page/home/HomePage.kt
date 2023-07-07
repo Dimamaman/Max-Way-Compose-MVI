@@ -1,7 +1,5 @@
 package uz.gita.dimaa.mymaxway.presenter.page.home
 
-import android.util.Log
-import android.widget.ImageButton
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,7 +11,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,7 +18,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -32,7 +28,7 @@ import cafe.adriel.voyager.hilt.getViewModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import uz.gita.dimaa.mymaxway.R
-import uz.gita.dimaa.mymaxway.data.model.Food
+import uz.gita.dimaa.mymaxway.domain.model.FoodData
 import uz.gita.dimaa.mymaxway.presenter.components.CustomSearchView
 import uz.gita.dimaa.mymaxway.presenter.components.FoodItem
 import uz.gita.dimaa.mymaxway.theme.DialogColor
@@ -71,7 +67,7 @@ fun HomePageContent(
 
     var search by remember { mutableStateOf("") }
     var count by remember { mutableStateOf(0) }
-    var foodData by remember { mutableStateOf(Food()) }
+    var foodData by remember { mutableStateOf(FoodData()) }
     var dialogState by remember { mutableStateOf(false) }
 
     Column(
@@ -79,10 +75,30 @@ fun HomePageContent(
             .fillMaxSize()
             .background(LightGrayColor)
     ) {
-        CustomSearchView(search = search) {
-            search = it
-            Log.d("HHH", "Search -> $it")
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            CustomSearchView(modifier = Modifier.weight(1f), search = search) {
+                search = it
 //                    onEventDispatcher(HomeContact.Intent.Search((search)))
+            }
+
+            Image(
+                modifier = Modifier.padding(end = 8.dp, top = 8.dp).size(30.dp).clickable(
+                    interactionSource = MutableInteractionSource(),
+                    indication = rememberRipple(
+                        bounded = false,
+                        radius = 25.dp,
+                        color = Color.Black
+                    ),
+                    onClick = {
+
+                    }
+                ),
+                painter = painterResource(id = R.drawable.history),
+                contentDescription = "")
+
         }
 
         LazyRow(modifier = Modifier.padding(top = 8.dp)) {
@@ -214,6 +230,14 @@ fun HomePageContent(
                                 contentAlignment = Alignment.CenterEnd
                             ) {
                                 Button(onClick = {
+                                    val food = FoodData(
+                                        id = foodData.id,
+                                        name = foodData.name,
+                                        price = foodData.price,
+                                        imageUrl = foodData.imageUrl,
+                                        description = foodData.description
+                                    )
+                                    onEventDispatcher.invoke(HomeContract.Intent.Add(food, count))
                                     dialogState = false
                                 }) {
                                     Text(text = "Ok")

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import uz.gita.dimaa.mymaxway.data.locale.SharedPref
+import uz.gita.dimaa.mymaxway.data.local.sharedPref.SharedPref
 import javax.inject.Inject
 
 @HiltViewModel

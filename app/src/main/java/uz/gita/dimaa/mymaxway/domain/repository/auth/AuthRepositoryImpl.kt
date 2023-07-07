@@ -9,8 +9,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import uz.gita.dimaa.mymaxway.data.locale.SharedPref
-import uz.gita.dimaa.mymaxway.domain.repository.auth.AuthRepository
+import uz.gita.dimaa.mymaxway.data.local.sharedPref.SharedPref
 import uz.gita.dimaa.mymaxway.util.myLog
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

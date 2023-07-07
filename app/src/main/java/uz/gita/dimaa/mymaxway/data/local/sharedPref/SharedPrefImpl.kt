@@ -1,4 +1,4 @@
-package uz.gita.dimaa.mymaxway.data.locale
+package uz.gita.dimaa.mymaxway.data.local.sharedPref
 
 import android.content.SharedPreferences
 import javax.inject.Inject

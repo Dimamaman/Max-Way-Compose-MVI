@@ -7,8 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import uz.gita.dimaa.mymaxway.data.locale.SharedPref
-import uz.gita.dimaa.mymaxway.data.locale.SharedPrefImpl
+import uz.gita.dimaa.mymaxway.data.local.sharedPref.SharedPref
+import uz.gita.dimaa.mymaxway.data.local.sharedPref.SharedPrefImpl
 import javax.inject.Singleton
 
 @Module
