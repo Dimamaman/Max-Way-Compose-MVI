@@ -20,6 +20,10 @@ interface HomeContract {
         data class HasError(val message: String): SideEffect
     }
 
+    interface Direction {
+        suspend fun goOrderPage()
+    }
+
     interface ViewModel : ContainerHost<UIState, SideEffect> {
         val uiState: StateFlow<UIState>
         fun onEventDispatcher(intent: Intent)

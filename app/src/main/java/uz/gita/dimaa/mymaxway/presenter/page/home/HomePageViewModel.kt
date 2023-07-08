@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
     private val homeUseCase: HomeUseCase,
+    private val direction: HomeDirection
 ): HomeContract.ViewModel, ViewModel(){
     override val container = container<HomeContract.UIState, HomeContract.SideEffect>(HomeContract.UIState())
 
@@ -56,7 +58,13 @@ class HomePageViewModel @Inject constructor(
             }
 
             is HomeContract.Intent.Add -> {
+                Log.d("LLL","Awqat -> ${intent.food}\n ${intent.count}")
                 homeUseCase.add(intent.food, intent.count)
+
+                viewModelScope.launch {
+                    delay(1000L)
+                    direction.goOrderPage()
+                }
             }
         }
     }
