@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -16,7 +15,7 @@ import cafe.adriel.voyager.navigator.tab.TabNavigator
 import uz.gita.dimaa.mymaxway.navigation.AppScreen
 import uz.gita.dimaa.mymaxway.presenter.page.home.HomePage
 import uz.gita.dimaa.mymaxway.presenter.page.orders.OrdersPage
-import uz.gita.dimaa.mymaxway.presenter.page.profile.ProfilePage
+import uz.gita.dimaa.mymaxway.presenter.page.profile.ProfileScreen
 
 class MainScreen: AppScreen() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +42,7 @@ class MainScreen: AppScreen() {
                     ) {
                         TabNavigationItem(tab = HomePage())
                         TabNavigationItem(tab = OrdersPage())
-                        TabNavigationItem(tab = ProfilePage())
+                        TabNavigationItem(tab = ProfileScreen())
                     }
                 }
             )

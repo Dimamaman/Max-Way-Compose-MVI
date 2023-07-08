@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -55,8 +56,6 @@ class HomePage : Tab, AndroidScreen() {
     }
 }
 
-var allCount = 0
-
 @Composable
 fun HomePageContent(
     uiState: HomeContract.UIState, onEventDispatcher: (HomeContract.Intent) -> Unit
@@ -78,7 +77,7 @@ fun HomePageContent(
         ) {
             CustomSearchView(modifier = Modifier.weight(1f), search = search) {
                 search = it
-//                    onEventDispatcher(HomeContact.Intent.Search((search)))
+                onEventDispatcher.invoke(HomeContract.Intent.Search(search))
             }
 
             Image(
@@ -90,9 +89,9 @@ fun HomePageContent(
                             bounded = false, radius = 25.dp, color = Color.Black
                         ),
                         onClick = {
-
+                            onEventDispatcher.invoke(HomeContract.Intent.OpenOrderScreen)
                         }),
-                painter = painterResource(id = R.drawable.history),
+                painter = painterResource(id = R.drawable.ic_buy),
                 contentDescription = ""
             )
 
@@ -134,9 +133,18 @@ fun HomePageContent(
         })
     }
 
-    Log.d("KKKK", "Count -> $count")
+    if (uiState.foods.isEmpty()) {
+
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(45.dp),
+                strokeWidth = 5.dp,
+                color = Color(0xFFF80358)
+            )
+        }
+    }
+
     if (count > 0) {
-        Log.d("KKKK", "Count If -> $count")
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
             BottomSheet(foodData = foodData, count = count, onEventDispatcher)
         }

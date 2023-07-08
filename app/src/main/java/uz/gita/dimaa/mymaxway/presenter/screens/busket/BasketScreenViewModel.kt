@@ -1,4 +1,4 @@
-package uz.gita.dimaa.mymaxway.presenter.page.orders
+package uz.gita.dimaa.mymaxway.presenter.screens.busket
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.viewmodel.container
@@ -20,18 +19,19 @@ import uz.gita.dimaa.mymaxway.domain.usecase.HomeUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class OrderPageViewModel @Inject constructor(
+class BasketScreenViewModel @Inject constructor(
     private val homeUseCase: HomeUseCase,
     private val roomRepository: RoomRepository,
-    private val sharedPref: SharedPref
-) : ViewModel(), OrderContract.ViewModel {
+    private val sharedPref: SharedPref,
+    private val direction: BasketContract.Direction
+) : ViewModel(), BasketContract.ViewModel {
     override val container =
-        container<OrderContract.UIState, OrderContract.SideEffect>(OrderContract.UIState())
-    override val uiState = MutableStateFlow(OrderContract.UIState())
+        container<BasketContract.UIState, BasketContract.SideEffect>(BasketContract.UIState())
+    override val uiState = MutableStateFlow(BasketContract.UIState())
 
-    override fun onEventDispatcher(intent: OrderContract.Intent) {
+    override fun onEventDispatcher(intent: BasketContract.Intent) {
         when (intent) {
-            is OrderContract.Intent.Loading -> {
+            is BasketContract.Intent.Loading -> {
                 homeUseCase.getFoodsFromRoom().onEach { foods ->
                     uiState.update {
                         it.copy(foods = foods)
@@ -39,11 +39,11 @@ class OrderPageViewModel @Inject constructor(
                 }.launchIn(viewModelScope)
             }
 
-            is OrderContract.Intent.Change -> {
+            is BasketContract.Intent.Change -> {
                 homeUseCase.updateFood(intent.foodEntity, intent.count)
             }
 
-            is OrderContract.Intent.Comment -> {
+            is BasketContract.Intent.Comment -> {
                 val list = ArrayList<FoodEntity>()
                 roomRepository.getFoods().onEach {
                     list.addAll(it)
@@ -60,29 +60,24 @@ class OrderPageViewModel @Inject constructor(
                 homeUseCase.addOrders(orderData).onEach {
                     it.onSuccess { message ->
                         intent {
-                            postSideEffect(OrderContract.SideEffect.HasError(message))
+                            postSideEffect(BasketContract.SideEffect.HasError(message))
                         }
                         list.clear()
                         roomRepository.clearData().onEach {
 
                         }.launchIn(viewModelScope)
+
+                        direction.back()
+
                     }
 
                     it.onFailure { message ->
                         intent {
-                            postSideEffect(OrderContract.SideEffect.HasError(message.message!!))
+                            postSideEffect(BasketContract.SideEffect.HasError(message.message!!))
                         }
                     }
                 }.launchIn(viewModelScope)
             }
         }
-    }
-    private fun getAllPrice(it:List<FoodEntity>):Long{
-        var allPrice = 0L
-        it.forEach { foodEntity ->
-            Log.d("JJJ","Price -> ${foodEntity.price}")
-            allPrice += foodEntity.price
-        }
-        return allPrice
     }
 }

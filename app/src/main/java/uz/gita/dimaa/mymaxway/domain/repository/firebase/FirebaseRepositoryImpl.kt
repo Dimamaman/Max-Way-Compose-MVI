@@ -4,13 +4,14 @@ import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import uz.gita.dimaa.mymaxway.data.local.room.entity.FoodEntity
 import uz.gita.dimaa.mymaxway.data.model.Category
 import uz.gita.dimaa.mymaxway.data.model.Document
 import uz.gita.dimaa.mymaxway.data.model.OrderData
@@ -73,7 +74,7 @@ class FirebaseRepositoryImpl @Inject constructor() : FirebaseRepository {
         }
     }
 
-    override  fun addOrders(
+    override fun addOrders(
         orderData: OrderData
     ): Flow<Result<String>> = callbackFlow {
         var documentId: String
@@ -91,7 +92,7 @@ class FirebaseRepositoryImpl @Inject constructor() : FirebaseRepository {
             ).addOnSuccessListener {
                 documentId = it.id
                 orderData.list.forEach { foodEntity ->
-                    Log.d("MMM","Repo -> $foodEntity")
+                    Log.d("MMM", "Repo -> $foodEntity")
                     db.collection("orders")
                         .document(documentId)
                         .collection("foods")
@@ -111,4 +112,56 @@ class FirebaseRepositoryImpl @Inject constructor() : FirebaseRepository {
         trySend(Result.success("Buyurtmangiz qabul qilindi"))
         awaitClose()
     }.flowOn(Dispatchers.IO)
+
+    override fun getOrderedFoods(userId: String): Flow<Result<List<OrderData>>> = flow {
+        val a = db.collection("orders")
+            .get()
+            .await()
+
+        val resultList = arrayListOf<OrderData>()
+
+        a.documents.forEach { document ->
+            val foods = arrayListOf<FoodEntity>()
+            val subCollection = document.reference.collection("foods")
+                .get()
+                .await()
+
+            subCollection.forEach { food ->
+                foods.add(food.toObject(FoodEntity::class.java))
+            }
+
+            if ((document.get("userId") as String) == userId) {
+                resultList.add(
+                    OrderData(
+                        userId = document.get("userId") as String,
+                        list = foods,
+                        comment = document.get("comment") as String,
+                        allPrice = document.get("allPrice") as Long
+                    )
+                )
+            }
+        }
+        emit(Result.success(resultList))
+    }
+
+    override fun searchFood(search: String): Flow<Result<List<FoodData>>> = flow {
+        val a = db.collection("orders")
+            .get().await()
+
+        a.documents.forEach { documentSnapshot ->
+            val subCollection = documentSnapshot.reference.collection("foods").get().await()
+            val foods = arrayListOf<FoodData>()
+            subCollection.forEach { food ->
+                Log.d("KKK","Firebase Food -> ${food.toObject(FoodData::class.java)}")
+                foods.add(food.toObject(FoodData::class.java))
+            }
+            val result = arrayListOf<FoodData>()
+            foods.forEach {
+                if (it.name.contains(search, ignoreCase = true)) {
+                    result.add(it)
+                }
+            }
+            emit(Result.success(result))
+        }
+    }
 }

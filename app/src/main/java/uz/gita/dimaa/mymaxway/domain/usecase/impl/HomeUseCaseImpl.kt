@@ -45,4 +45,12 @@ class HomeUseCaseImpl @Inject constructor(
     override fun updateFood(foodEntity: FoodEntity, count: Int) {
         roomRepository.updateFood(foodEntity, count)
     }
+
+    override fun getOrderedFoods(userId: String): Flow<Result<List<OrderData>>> {
+        return repository.getOrderedFoods(userId)
+    }
+
+    override fun searchFood(search: String): Flow<Result<List<FoodData>>> {
+        return repository.searchFood(search)
+    }
 }

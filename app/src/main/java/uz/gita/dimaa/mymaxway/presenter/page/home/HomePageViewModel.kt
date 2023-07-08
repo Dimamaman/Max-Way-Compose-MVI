@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
     private val homeUseCase: HomeUseCase,
-    private val direction: HomeDirection
+    private val direction: HomeContract.Direction
 ): HomeContract.ViewModel, ViewModel(){
     override val container = container<HomeContract.UIState, HomeContract.SideEffect>(HomeContract.UIState())
 
@@ -54,16 +54,36 @@ class HomePageViewModel @Inject constructor(
             }
 
             is HomeContract.Intent.Search -> {
+                if (intent.search.isEmpty()) {
+                    onEventDispatcher(HomeContract.Intent.Loading)
+                } else {
+                    homeUseCase.searchFood(intent.search).onEach {
+                        it.onSuccess { list ->
+                            uiState.update {
+                                it.copy(foods = list)
+                            }
+                        }
 
+                        it.onFailure {
+                            Log.d("KKK","Error -> ${it.message}")
+                        }
+                    }.launchIn(viewModelScope)
+                }
             }
 
             is HomeContract.Intent.Add -> {
                 Log.d("LLL","Awqat -> ${intent.food}\n ${intent.count}")
                 homeUseCase.add(intent.food, intent.count)
-
                 viewModelScope.launch {
-                    delay(1000L)
-                    direction.goOrderPage()
+                    delay(500L)
+                    direction.goOrderScreen()
+                }
+            }
+
+            is HomeContract.Intent.OpenOrderScreen -> {
+                viewModelScope.launch {
+                    delay(500L)
+                    direction.goOrderScreen()
                 }
             }
         }

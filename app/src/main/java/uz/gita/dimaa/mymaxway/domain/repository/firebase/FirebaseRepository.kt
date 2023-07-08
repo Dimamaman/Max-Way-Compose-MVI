@@ -8,5 +8,7 @@ import uz.gita.dimaa.mymaxway.domain.model.FoodData
 interface FirebaseRepository {
     suspend fun getAllCategory(): Result<List<Category>>
     suspend fun getAllFoods(): Result<List<FoodData>>
-     fun addOrders(orderData: OrderData): Flow<Result<String>>
+    fun addOrders(orderData: OrderData): Flow<Result<String>>
+    fun getOrderedFoods(userId: String): Flow<Result<List<OrderData>>>
+    fun searchFood(search: String): Flow<Result<List<FoodData>>>
 }

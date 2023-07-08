@@ -7,6 +7,7 @@ import uz.gita.dimaa.mymaxway.domain.model.FoodData
 interface HomeContract {
     sealed interface Intent {
         object Loading: Intent
+        object OpenOrderScreen: Intent
         data class Search(val search: String): Intent
         data class Add(val food: FoodData, val count: Int): Intent
     }
@@ -21,7 +22,7 @@ interface HomeContract {
     }
 
     interface Direction {
-        suspend fun goOrderPage()
+        suspend fun goOrderScreen()
     }
 
     interface ViewModel : ContainerHost<UIState, SideEffect> {
