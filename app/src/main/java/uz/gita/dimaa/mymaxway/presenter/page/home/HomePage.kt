@@ -1,6 +1,5 @@
 package uz.gita.dimaa.mymaxway.presenter.page.home
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,7 +49,7 @@ class HomePage : Tab, AndroidScreen() {
     @Composable
     override fun Content() {
         val viewModel: HomeContract.ViewModel = getViewModel<HomePageViewModel>()
-        val uiState = viewModel.uiState.collectAsState().value
+        val uiState = viewModel.uiState.collectAsState()
 
         HomePageContent(uiState, viewModel::onEventDispatcher)
     }
@@ -58,13 +57,15 @@ class HomePage : Tab, AndroidScreen() {
 
 @Composable
 fun HomePageContent(
-    uiState: HomeContract.UIState, onEventDispatcher: (HomeContract.Intent) -> Unit
+    uiState: State<HomeContract.UIState>, onEventDispatcher: (HomeContract.Intent) -> Unit
 ) {
 
     var search by remember { mutableStateOf("") }
     var count by remember { mutableStateOf(0) }
     var foodData by remember { mutableStateOf(FoodData()) }
     var dialogState by remember { mutableStateOf(false) }
+
+    onEventDispatcher.invoke(HomeContract.Intent.Loading)
 
     Column(
         modifier = Modifier
@@ -99,7 +100,7 @@ fun HomePageContent(
 
         LazyRow(modifier = Modifier.padding(top = 8.dp)) {
             item { Spacer(modifier = Modifier.width(10.dp)) }
-            items(uiState.categories.size) {
+            items(uiState.value.categories.size) {
                 Button(
                     onClick = {
 //                        if (selectedCategories.contains(uiState.categories[it])) {
@@ -117,13 +118,13 @@ fun HomePageContent(
                         .clip(RoundedCornerShape(1.dp)),
                     shape = MaterialTheme.shapes.small,
                 ) {
-                    Text(text = uiState.categories[it])
+                    Text(text = uiState.value.categories[it])
                 }
             }
         }
 
         LazyVerticalGrid(columns = GridCells.Fixed(2), content = {
-            items(uiState.foods) { food ->
+            items(uiState.value.foods) { food ->
                 FoodItem(food = food) {
                     dialogState = true
                     foodData = food
@@ -133,7 +134,7 @@ fun HomePageContent(
         })
     }
 
-    if (uiState.foods.isEmpty()) {
+    if (uiState.value.foods.isEmpty()) {
 
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator(

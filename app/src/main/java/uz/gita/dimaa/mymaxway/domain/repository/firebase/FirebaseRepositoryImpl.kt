@@ -145,23 +145,24 @@ class FirebaseRepositoryImpl @Inject constructor() : FirebaseRepository {
     }
 
     override fun searchFood(search: String): Flow<Result<List<FoodData>>> = flow {
-        val a = db.collection("orders")
+        val a = db.collection("MaxWay")
             .get().await()
 
+        val result = arrayListOf<FoodData>()
         a.documents.forEach { documentSnapshot ->
-            val subCollection = documentSnapshot.reference.collection("foods").get().await()
+
+            val subCollection = documentSnapshot.reference.collection("list").get().await()
             val foods = arrayListOf<FoodData>()
             subCollection.forEach { food ->
-                Log.d("KKK","Firebase Food -> ${food.toObject(FoodData::class.java)}")
                 foods.add(food.toObject(FoodData::class.java))
             }
-            val result = arrayListOf<FoodData>()
+            Log.d("LLL", "foods -> ${foods}")
             foods.forEach {
                 if (it.name.contains(search, ignoreCase = true)) {
                     result.add(it)
                 }
             }
-            emit(Result.success(result))
         }
-    }
+        emit(Result.success(result))
+    }.flowOn(Dispatchers.IO)
 }

@@ -18,5 +18,8 @@ class SharedPrefImpl @Inject constructor(private val pref: SharedPreferences) : 
     override var phone: String
         set(value) { pref.edit().putString("PHONE", value).apply() }
         get() = pref.getString("PHONE", "").toString()
+    override var isFirst: Boolean
+        set(value) { pref.edit().putBoolean("IS_FIRST", value).apply() }
+        get() = pref.getBoolean("IS_FIRST", true)
 
 }

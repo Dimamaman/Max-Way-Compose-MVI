@@ -9,4 +9,6 @@ interface SharedPref {
     var hasToken: Boolean
 
     var phone: String
+
+    var isFirst: Boolean
 }
