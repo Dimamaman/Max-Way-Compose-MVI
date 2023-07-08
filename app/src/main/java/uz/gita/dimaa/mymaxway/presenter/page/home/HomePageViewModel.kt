@@ -1,6 +1,5 @@
 package uz.gita.dimaa.mymaxway.presenter.page.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +23,10 @@ class HomePageViewModel @Inject constructor(
         container<HomeContract.UIState, HomeContract.SideEffect>(HomeContract.UIState())
 
     override val uiState = MutableStateFlow(HomeContract.UIState())
+
+    init {
+        onEventDispatcher(HomeContract.Intent.Loading)
+    }
 
     override fun onEventDispatcher(intent: HomeContract.Intent) {
         when (intent) {
@@ -56,7 +59,6 @@ class HomePageViewModel @Inject constructor(
                 } else {
                     homeUseCase.searchFood(intent.search).debounce(300).onEach {
                         it.onSuccess { list ->
-
                             uiState.update {
                                 it.copy(foods = list)
                             }

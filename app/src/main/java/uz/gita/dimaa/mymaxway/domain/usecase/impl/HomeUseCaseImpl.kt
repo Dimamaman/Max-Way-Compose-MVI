@@ -38,21 +38,6 @@ class HomeUseCaseImpl @Inject constructor(
         return roomRepository.getFoods()
     }
 
-    override fun add(food: FoodData, count: Int) {
-        val list = arrayListOf<FoodEntity>()
-            roomRepository.getFoods().onEach {
-            list.addAll(it)
-        }.flowOn(Dispatchers.IO)
-
-        list.forEach {
-            if (it.count == count) {
-
-            }
-        }
-
-        roomRepository.add(food,count)
-    }
-
     override fun updateFood(foodEntity: FoodEntity, count: Int) {
         roomRepository.updateFood(foodEntity, count)
     }

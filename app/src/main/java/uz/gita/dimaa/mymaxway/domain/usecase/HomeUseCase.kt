@@ -10,7 +10,6 @@ interface HomeUseCase {
      fun addOrders(orderData: OrderData): Flow<Result<String>>
     suspend fun getFoods(): Result<List<FoodData>>
     fun getFoodsFromRoom(): Flow<List<FoodEntity>>
-    fun add(food: FoodData, count: Int)
     fun updateFood(foodEntity: FoodEntity, count: Int)
     fun getOrderedFoods(userId: String): Flow<Result<List<OrderData>>>
     fun searchFood(search: String): Flow<Result<List<FoodData>>>

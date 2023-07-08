@@ -150,13 +150,12 @@ class FirebaseRepositoryImpl @Inject constructor() : FirebaseRepository {
 
         val result = arrayListOf<FoodData>()
         a.documents.forEach { documentSnapshot ->
-
-            val subCollection = documentSnapshot.reference.collection("list").get().await()
             val foods = arrayListOf<FoodData>()
+            val subCollection = documentSnapshot.reference.collection("list").get().await()
+
             subCollection.forEach { food ->
                 foods.add(food.toObject(FoodData::class.java))
             }
-            Log.d("LLL", "foods -> ${foods}")
             foods.forEach {
                 if (it.name.contains(search, ignoreCase = true)) {
                     result.add(it)

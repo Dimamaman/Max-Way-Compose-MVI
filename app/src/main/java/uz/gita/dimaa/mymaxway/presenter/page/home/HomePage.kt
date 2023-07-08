@@ -67,8 +67,6 @@ fun HomePageContent(
     var foodData by remember { mutableStateOf(FoodData()) }
     var dialogState by remember { mutableStateOf(false) }
 
-    onEventDispatcher.invoke(HomeContract.Intent.Loading)
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -176,6 +174,7 @@ fun BottomSheet(foodData: FoodData, count: Int, onEventDispatcher: (HomeContract
 
             Button(modifier = Modifier.weight(1f), onClick = {
                 onEventDispatcher.invoke(HomeContract.Intent.Add(foodData, count))
+                onEventDispatcher.invoke(HomeContract.Intent.OpenOrderScreen)
             }) {
                 Text(text = "Order")
             }
