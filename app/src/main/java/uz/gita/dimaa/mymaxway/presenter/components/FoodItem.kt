@@ -1,5 +1,8 @@
 package uz.gita.dimaa.mymaxway.presenter.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,10 +10,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,11 +23,17 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import uz.gita.dimaa.mymaxway.R
 import uz.gita.dimaa.mymaxway.domain.model.FoodData
+import uz.gita.dimaa.mymaxway.presenter.page.home.HomeContract
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.runtime.Composable
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun FoodItem(
     food: FoodData,
+    onEventDispatcher: (HomeContract.Intent) -> Unit,
     onClick: (Int) -> Unit
 ) {
     var count by remember { mutableStateOf(0) }
@@ -98,9 +104,11 @@ fun FoodItem(
                                     onClick = {
                                         if (count > 1) {
                                             count--
+                                            onEventDispatcher.invoke(HomeContract.Intent.Change(food.toEntity(count),count))
                                             onClick.invoke(count)
                                         } else {
                                             count = 0
+                                            onEventDispatcher.invoke(HomeContract.Intent.Delete(food))
                                             onClick.invoke(count)
                                         }
                                     }
@@ -125,8 +133,11 @@ fun FoodItem(
                                         color = Color.Black
                                     ),
                                     onClick = {
+                                        onEventDispatcher.invoke(HomeContract.Intent.Add(food,count))
                                         count++
                                         onClick.invoke(count)
+                                        onEventDispatcher.invoke(HomeContract.Intent.Change(food.toEntity(count),count))
+
                                     }
                                 ),
                             painter = painterResource(id = R.drawable.ic_up),
@@ -136,5 +147,36 @@ fun FoodItem(
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DismissBackground(dismissState: DismissState) {
+    val color = when (dismissState.dismissDirection) {
+        DismissDirection.StartToEnd -> Color(0xFFFF1744)
+        DismissDirection.EndToStart -> Color(0xFFFF1744)
+        null -> Color.Transparent
+    }
+    val direction = dismissState.dismissDirection
+
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .clip(RoundedCornerShape(12.dp))
+            .background(color)
+            .padding(12.dp, 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        if (direction == DismissDirection.StartToEnd) Icon(
+            Icons.Default.Delete,
+            contentDescription = "delete"
+        )
+        Spacer(modifier = Modifier)
+        if (direction == DismissDirection.EndToStart)  Icon(
+            Icons.Default.Delete,
+            contentDescription = "Edit"
+        )
     }
 }

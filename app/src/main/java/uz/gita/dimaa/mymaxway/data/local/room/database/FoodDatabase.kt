@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import uz.gita.dimaa.mymaxway.data.local.room.dao.FoodDao
 import uz.gita.dimaa.mymaxway.data.local.room.entity.FoodEntity
 
-@Database(entities = [FoodEntity::class], version = 2)
+@Database(entities = [FoodEntity::class], version = 1)
 abstract class FoodDatabase : RoomDatabase() {
     abstract fun addFood(): FoodDao
 }

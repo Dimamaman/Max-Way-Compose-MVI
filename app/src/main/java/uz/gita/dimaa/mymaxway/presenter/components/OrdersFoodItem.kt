@@ -23,11 +23,14 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import uz.gita.dimaa.mymaxway.R
 import uz.gita.dimaa.mymaxway.data.local.room.entity.FoodEntity
+import uz.gita.dimaa.mymaxway.presenter.page.home.HomeContract
+import uz.gita.dimaa.mymaxway.presenter.screens.busket.BasketContract
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun OrdersFoodItem(
     foodEntity: FoodEntity,
+    onEventDispatcher: (BasketContract.Intent) -> Unit,
     change:(Int) -> Unit
 ) {
     var count by remember { mutableStateOf(foodEntity.count) }

@@ -1,5 +1,6 @@
 package uz.gita.dimaa.mymaxway.presenter.page.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,6 +32,7 @@ import uz.gita.dimaa.mymaxway.R
 import uz.gita.dimaa.mymaxway.domain.model.FoodData
 import uz.gita.dimaa.mymaxway.presenter.components.CustomSearchView
 import uz.gita.dimaa.mymaxway.presenter.components.FoodItem
+import uz.gita.dimaa.mymaxway.presenter.components.FoodItemOne
 import uz.gita.dimaa.mymaxway.theme.LightGrayColor
 
 class HomePage : Tab, AndroidScreen() {
@@ -125,7 +127,7 @@ fun HomePageContent(
 
         LazyVerticalGrid(columns = GridCells.Fixed(2), content = {
             items(uiState.value.foods) { food ->
-                FoodItem(food = food) {
+                FoodItem(food = food, onEventDispatcher) {
                     dialogState = true
                     foodData = food
                     count = it

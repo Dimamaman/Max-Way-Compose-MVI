@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import uz.gita.dimaa.mymaxway.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomSearchView(
     search: String,
@@ -49,7 +50,6 @@ fun CustomSearchView(
             value = search,
             onValueChange = onValueChange,
             colors = TextFieldDefaults.textFieldColors(
-                textColor = Color.Black,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,

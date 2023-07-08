@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.viewmodel.container
@@ -33,6 +34,7 @@ class BasketScreenViewModel @Inject constructor(
         when (intent) {
             is BasketContract.Intent.Loading -> {
                 homeUseCase.getFoodsFromRoom().onEach { foods ->
+                    Log.d("TTT","Foods From Room -> $foods\n")
                     uiState.update {
                         it.copy(foods = foods)
                     }
@@ -77,6 +79,12 @@ class BasketScreenViewModel @Inject constructor(
                         }
                     }
                 }.launchIn(viewModelScope)
+            }
+
+            is BasketContract.Intent.Delete -> {
+                viewModelScope.launch {
+                    roomRepository.delete(intent.food.toEntity(0))
+                }
             }
         }
     }

@@ -35,4 +35,8 @@ class RoomRepositoryImpl @Inject constructor(
         foodDao.clearData()
         emit(Unit)
     }.flowOn(Dispatchers.IO)
+
+    override fun delete(food: FoodEntity) {
+        foodDao.delete(food)
+    }
 }

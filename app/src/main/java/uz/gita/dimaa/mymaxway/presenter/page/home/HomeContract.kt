@@ -2,7 +2,9 @@ package uz.gita.dimaa.mymaxway.presenter.page.home
 
 import kotlinx.coroutines.flow.StateFlow
 import org.orbitmvi.orbit.ContainerHost
+import uz.gita.dimaa.mymaxway.data.local.room.entity.FoodEntity
 import uz.gita.dimaa.mymaxway.domain.model.FoodData
+import uz.gita.dimaa.mymaxway.presenter.screens.busket.BasketContract
 
 interface HomeContract {
     sealed interface Intent {
@@ -10,6 +12,9 @@ interface HomeContract {
         object OpenOrderScreen: Intent
         data class Search(val search: String): Intent
         data class Add(val food: FoodData, val count: Int): Intent
+        data class Change(val foodEntity: FoodEntity, val count: Int): Intent
+        data class Delete(val food: FoodData): Intent
+
     }
 
     data class UIState(

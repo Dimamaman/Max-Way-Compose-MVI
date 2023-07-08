@@ -1,5 +1,6 @@
 package uz.gita.dimaa.mymaxway.presenter.screens.busket
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,6 +26,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import org.orbitmvi.orbit.compose.collectSideEffect
 import uz.gita.dimaa.mymaxway.R
 import uz.gita.dimaa.mymaxway.data.local.room.entity.FoodEntity
+import uz.gita.dimaa.mymaxway.presenter.components.FoodItemOne
 import uz.gita.dimaa.mymaxway.presenter.components.OrdersFoodItem
 import uz.gita.dimaa.mymaxway.theme.LightGrayColor
 
@@ -60,6 +62,7 @@ class BasketScreen : Tab, AndroidScreen() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BasketScreenContent(
     uiState: BasketContract.UIState,
@@ -92,10 +95,16 @@ fun BasketScreenContent(
             LazyColumn(modifier = Modifier.weight(1f)) {
 
                 items(uiState.foods) { foodEntity ->
-
-                    OrdersFoodItem(foodEntity = foodEntity) {
-                        onEventDispatcher.invoke(BasketContract.Intent.Change(foodEntity, it))
-                    }
+                    FoodItemOne(
+                        foodEntity = foodEntity,
+                        onEventDispatcher = onEventDispatcher,
+                        onRemove = {
+                            onEventDispatcher.invoke(BasketContract.Intent.Delete(foodEntity.toData()))
+                        },
+                        change = {
+                            onEventDispatcher.invoke(BasketContract.Intent.Change(foodEntity, it))
+                        }
+                    )
                 }
                 item {
                     if (uiState.foods.isEmpty()) {
@@ -119,7 +128,6 @@ fun BasketScreenContent(
                                 value = comment,
                                 onValueChange = { newValue -> comment = newValue },
                                 colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent,
                                     disabledIndicatorColor = Color.Transparent,

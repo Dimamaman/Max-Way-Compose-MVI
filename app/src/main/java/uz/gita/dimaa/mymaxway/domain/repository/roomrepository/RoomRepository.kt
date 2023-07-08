@@ -9,4 +9,5 @@ interface RoomRepository {
     fun getFoods(): Flow<List<FoodEntity>>
     fun updateFood(foodEntity: FoodEntity, count: Int)
     fun clearData(): Flow<Unit>
+    fun delete(food: FoodEntity)
 }

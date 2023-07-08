@@ -15,6 +15,9 @@ interface FoodDao {
     @Update
     fun update(foodEntity: FoodEntity)
 
+    @Delete
+    fun delete(foodEntity: FoodEntity)
+
     @Query("DELETE  FROM food")
     fun clearData()
 }

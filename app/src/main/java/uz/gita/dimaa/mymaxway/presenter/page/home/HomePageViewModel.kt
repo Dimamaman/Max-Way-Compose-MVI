@@ -28,34 +28,16 @@ class HomePageViewModel @Inject constructor(
     override fun onEventDispatcher(intent: HomeContract.Intent) {
         when (intent) {
             is HomeContract.Intent.Loading -> {
-                if (sharedPref.isFirst) {
-                    Log.d("TTT","HomeViewModel -> true")
-                    viewModelScope.launch {
-                        homeUseCase.getFoods().onSuccess { list ->
-                            list.forEach {
-                                roomRepository.add(it, 0)
-                            }
-
-                            delay(1000L)
-
-                            roomRepository.getFoods().onEach { roomList ->
-                                uiState.update {
-                                    it.copy(foods = roomList.map { foodEntity -> foodEntity.toData() })
-                                }
-                            }.launchIn(viewModelScope)
-                            sharedPref.isFirst = false
-                        }.onFailure {
-
-                        }
-                    }
-                } else {
-                    Log.d("TTT","HomeViewModel -> false")
-                    roomRepository.getFoods().onEach { list ->
+                viewModelScope.launch {
+                    homeUseCase.getFoods().onSuccess { list ->
                         uiState.update {
-                            it.copy(foods = list.map { it.toData() })
+                            it.copy(foods = list)
                         }
-                    }.launchIn(viewModelScope)
+                    }.onFailure {
+
+                    }
                 }
+
                 homeUseCase.getCategories().onEach {
                     it.onSuccess { categoryName ->
                         uiState.update {
@@ -88,12 +70,7 @@ class HomePageViewModel @Inject constructor(
             }
 
             is HomeContract.Intent.Add -> {
-
-                homeUseCase.add(intent.food, intent.count)
-                viewModelScope.launch {
-                    delay(500L)
-                    direction.goOrderScreen()
-                }
+                roomRepository.add(intent.food, intent.count)
             }
 
             is HomeContract.Intent.OpenOrderScreen -> {
@@ -102,26 +79,13 @@ class HomePageViewModel @Inject constructor(
                     direction.goOrderScreen()
                 }
             }
-        }
-    }
 
-    private fun getAllFoodsFromFirebase() {
-        viewModelScope.launch {
-            homeUseCase.getFoods().onSuccess { list ->
-                list.forEach {
-                    roomRepository.add(it, 0)
-                }
+            is HomeContract.Intent.Change -> {
+                roomRepository.updateFood(intent.foodEntity, intent.count)
+            }
 
-                delay(1000L)
-
-                roomRepository.getFoods().onEach { roomList ->
-                    uiState.update {
-                        it.copy(foods = roomList.map { foodEntity -> foodEntity.toData() })
-                    }
-                }.launchIn(viewModelScope)
-
-            }.onFailure {
-
+            is HomeContract.Intent.Delete -> {
+                roomRepository.delete(intent.food.toEntity(0))
             }
         }
     }
