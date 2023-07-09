@@ -3,6 +3,7 @@ package uz.gita.dimaa.mymaxway.domain.usecase.impl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import uz.gita.dimaa.mymaxway.data.local.room.entity.FoodEntity
+import uz.gita.dimaa.mymaxway.data.model.Category
 import uz.gita.dimaa.mymaxway.data.model.OrderData
 import uz.gita.dimaa.mymaxway.domain.model.FoodData
 import uz.gita.dimaa.mymaxway.domain.repository.firebase.FirebaseRepository
@@ -48,5 +49,9 @@ class HomeUseCaseImpl @Inject constructor(
 
     override fun searchFood(search: String): Flow<Result<List<FoodData>>> {
         return repository.searchFood(search)
+    }
+
+    override fun searchFoodByCategory(search: String): Flow<Result<List<Category>>> {
+        return repository.searchFoodByCategory(search)
     }
 }

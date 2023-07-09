@@ -1,5 +1,6 @@
 package uz.gita.dimaa.mymaxway.presenter.page.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,10 +32,17 @@ class HomePageViewModel @Inject constructor(
     override fun onEventDispatcher(intent: HomeContract.Intent) {
         when (intent) {
             is HomeContract.Intent.Loading -> {
+                uiState.update {
+                    it.copy(isRefreshing = false)
+                }
                 viewModelScope.launch {
                     homeUseCase.getFoods().onSuccess { list ->
                         uiState.update {
                             it.copy(foods = list)
+                        }
+
+                        uiState.update {
+                            it.copy(isRefreshing = true)
                         }
                     }.onFailure {
 
@@ -46,6 +54,7 @@ class HomePageViewModel @Inject constructor(
                         uiState.update {
                             it.copy(categories = categoryName)
                         }
+                        uiState.update { it.copy(isRefreshing = false) }
                     }
                     it.onFailure {
 
@@ -88,6 +97,23 @@ class HomePageViewModel @Inject constructor(
 
             is HomeContract.Intent.Delete -> {
                 roomRepository.delete(intent.food.toEntity(0))
+            }
+
+            is HomeContract.Intent.SearchByCategory -> {
+                homeUseCase.searchFoodByCategory(intent.search).onEach {
+                    Log.d("GGG","ViewModel Search All -> ${intent.search}")
+                    it.onSuccess {  foodData ->
+                            foodData.forEach { category ->
+                                uiState.update {
+                                it.copy(foods = category.listFood)
+                            }
+                        }
+                    }
+
+                    it.onFailure {
+
+                    }
+                }.launchIn(viewModelScope)
             }
         }
     }

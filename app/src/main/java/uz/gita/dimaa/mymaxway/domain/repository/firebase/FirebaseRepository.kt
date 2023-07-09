@@ -11,4 +11,5 @@ interface FirebaseRepository {
     fun addOrders(orderData: OrderData): Flow<Result<String>>
     fun getOrderedFoods(userId: String): Flow<Result<List<OrderData>>>
     fun searchFood(search: String): Flow<Result<List<FoodData>>>
+    fun searchFoodByCategory(search: String): Flow<Result<List<Category>>>
 }

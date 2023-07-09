@@ -2,6 +2,7 @@ package uz.gita.dimaa.mymaxway.domain.usecase
 
 import kotlinx.coroutines.flow.Flow
 import uz.gita.dimaa.mymaxway.data.local.room.entity.FoodEntity
+import uz.gita.dimaa.mymaxway.data.model.Category
 import uz.gita.dimaa.mymaxway.data.model.OrderData
 import uz.gita.dimaa.mymaxway.domain.model.FoodData
 
@@ -13,4 +14,5 @@ interface HomeUseCase {
     fun updateFood(foodEntity: FoodEntity, count: Int)
     fun getOrderedFoods(userId: String): Flow<Result<List<OrderData>>>
     fun searchFood(search: String): Flow<Result<List<FoodData>>>
+    fun searchFoodByCategory(search: String): Flow<Result<List<Category>>>
 }

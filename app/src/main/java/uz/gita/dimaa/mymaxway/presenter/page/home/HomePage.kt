@@ -28,6 +28,8 @@ import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.hilt.getViewModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import uz.gita.dimaa.mymaxway.R
 import uz.gita.dimaa.mymaxway.domain.model.FoodData
 import uz.gita.dimaa.mymaxway.presenter.components.CustomSearchView
@@ -66,6 +68,9 @@ fun HomePageContent(
     var count by remember { mutableStateOf(0) }
     var foodData by remember { mutableStateOf(FoodData()) }
     var dialogState by remember { mutableStateOf(false) }
+    val isLoading by remember { mutableStateOf(uiState.value.isRefreshing) }
+
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
 
     Column(
         modifier = Modifier
@@ -103,15 +108,7 @@ fun HomePageContent(
             items(uiState.value.categories.size) {
                 Button(
                     onClick = {
-//                        if (selectedCategories.contains(uiState.categories[it])) {
-//                            selectedCategories.remove(uiState.categories[it])
-//                        } else {
-//                            selectedCategories.add(uiState.categories[it])
-//                        }
-
-//                        onEventDispatcher(
-//                            HomeContact.Intent.SelectCategories(selectedCategories)
-//                        )
+                        onEventDispatcher.invoke(HomeContract.Intent.SearchByCategory(uiState.value.categories[it]))
                     },
                     modifier = Modifier
                         .padding(horizontal = 2.dp)
@@ -123,15 +120,20 @@ fun HomePageContent(
             }
         }
 
-        LazyVerticalGrid(columns = GridCells.Fixed(2), content = {
-            items(uiState.value.foods) { food ->
-                FoodItem(food = food, onEventDispatcher) {
-                    dialogState = true
-                    foodData = food
-                    count = it
+        
+        SwipeRefresh(state = swipeRefreshState, onRefresh = {
+            onEventDispatcher.invoke(HomeContract.Intent.Loading)
+        }) {
+            LazyVerticalGrid(columns = GridCells.Fixed(2), content = {
+                items(uiState.value.foods) { food ->
+                    FoodItem(food = food, onEventDispatcher) {
+                        dialogState = true
+                        foodData = food
+                        count = it
+                    }
                 }
-            }
-        })
+            })
+        }
     }
 
     if (uiState.value.foods.isEmpty()) {

@@ -105,4 +105,8 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.5.1'
     implementation 'androidx.room:room-ktx:2.5.1'
     kapt 'androidx.room:room-compiler:2.5.1'
+
+
+    // Swipe Refresh
+    implementation 'com.google.accompanist:accompanist-swiperefresh:0.27.0'
 }

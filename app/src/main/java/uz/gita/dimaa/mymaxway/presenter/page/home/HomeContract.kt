@@ -11,6 +11,7 @@ interface HomeContract {
         object Loading: Intent
         object OpenOrderScreen: Intent
         data class Search(val search: String): Intent
+        data class SearchByCategory(val search: String): Intent
         data class Add(val food: FoodData, val count: Int): Intent
         data class Change(val foodEntity: FoodEntity, val count: Int): Intent
         data class Delete(val food: FoodData): Intent
@@ -19,7 +20,8 @@ interface HomeContract {
 
     data class UIState(
         val foods: List<FoodData> = emptyList(),
-        val categories: List<String> = emptyList()
+        val categories: List<String> = emptyList(),
+        val isRefreshing: Boolean = true
     )
 
     sealed interface SideEffect {

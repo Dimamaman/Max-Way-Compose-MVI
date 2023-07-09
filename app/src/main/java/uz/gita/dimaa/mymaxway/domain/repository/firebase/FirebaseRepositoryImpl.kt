@@ -164,4 +164,27 @@ class FirebaseRepositoryImpl @Inject constructor() : FirebaseRepository {
         }
         emit(Result.success(result))
     }.flowOn(Dispatchers.IO)
+
+    override fun searchFoodByCategory(search: String): Flow<Result<List<Category>>> = flow {
+        val a = db.collection("MaxWay").get().await()
+        val list = arrayListOf<Category>()
+        a.documents.forEach { documentSnapshot ->
+            val foods = arrayListOf<FoodData>()
+            val title = documentSnapshot.get("title")
+            if (title == search) {
+                val subCollection = documentSnapshot.reference.collection("list").get().await()
+                subCollection.forEach { food ->
+                    foods.add(food.toObject(FoodData::class.java))
+                }
+                list.add(
+                    Category(
+                        id = documentSnapshot.get("id") as Long,
+                        title = documentSnapshot.get("title") as String,
+                        listFood = foods
+                    )
+                )
+            }
+        }
+        emit(Result.success(list))
+    }.flowOn(Dispatchers.IO)
 }
