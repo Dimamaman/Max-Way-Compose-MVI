@@ -33,16 +33,16 @@ class HomePageViewModel @Inject constructor(
         when (intent) {
             is HomeContract.Intent.Loading -> {
                 uiState.update {
-                    it.copy(isRefreshing = false)
+                    it.copy(isRefreshing = false, loading = true)
                 }
                 viewModelScope.launch {
                     homeUseCase.getFoods().onSuccess { list ->
                         uiState.update {
-                            it.copy(foods = list)
+                            it.copy(foods = list,loading = false)
                         }
 
                         uiState.update {
-                            it.copy(isRefreshing = true)
+                            it.copy(isRefreshing = true,loading = false)
                         }
                     }.onFailure {
 
@@ -52,9 +52,8 @@ class HomePageViewModel @Inject constructor(
                 homeUseCase.getCategories().onEach {
                     it.onSuccess { categoryName ->
                         uiState.update {
-                            it.copy(categories = categoryName)
+                            it.copy(categories = categoryName, isRefreshing = false,loading = false)
                         }
-                        uiState.update { it.copy(isRefreshing = false) }
                     }
                     it.onFailure {
 
@@ -64,12 +63,22 @@ class HomePageViewModel @Inject constructor(
 
             is HomeContract.Intent.Search -> {
                 if (intent.search.isEmpty()) {
+                    uiState.update { it.copy(isEmpty = false) }
                     onEventDispatcher(HomeContract.Intent.Loading)
                 } else {
+                    uiState.update {
+                        it.copy(loading = true)
+                    }
                     homeUseCase.searchFood(intent.search).debounce(300).onEach {
                         it.onSuccess { list ->
                             uiState.update {
-                                it.copy(foods = list)
+                                it.copy(foods = list, loading = false)
+                            }
+
+                            if (list.isEmpty()) {
+                                uiState.update { it.copy(isEmpty = true) }
+                            } else {
+                                uiState.update { it.copy(isEmpty = false) }
                             }
                         }
 

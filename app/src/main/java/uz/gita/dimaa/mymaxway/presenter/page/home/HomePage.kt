@@ -1,5 +1,6 @@
 package uz.gita.dimaa.mymaxway.presenter.page.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -70,6 +71,7 @@ fun HomePageContent(
     var foodData by remember { mutableStateOf(FoodData()) }
     var dialogState by remember { mutableStateOf(false) }
     val isLoading by remember { mutableStateOf(uiState.value.isRefreshing) }
+    val loading by remember { mutableStateOf(uiState.value.loading) }
 
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
 
@@ -138,14 +140,32 @@ fun HomePageContent(
         }
     }
 
-    if (uiState.value.foods.isEmpty()) {
-
+    if (uiState.value.loading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator(
                 modifier = Modifier.size(45.dp),
                 strokeWidth = 5.dp,
                 color = dark_grey
             )
+        }
+    }
+
+    if (uiState.value.isEmpty) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Image(
+                    modifier = Modifier.size(50.dp),
+                    painter = painterResource(id = R.drawable.ic_search),
+                    contentDescription = ""
+                )
+                Spacer(modifier = Modifier.height(30.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    text = "Not Found",
+                    fontSize = 25.sp
+                )
+            }
         }
     }
 

@@ -18,6 +18,8 @@ interface HomeContract {
     }
 
     data class UIState(
+        val loading: Boolean = true,
+        val isEmpty: Boolean = false,
         val foods: List<FoodData> = emptyList(),
         val categories: List<String> = emptyList(),
         val isRefreshing: Boolean = true
