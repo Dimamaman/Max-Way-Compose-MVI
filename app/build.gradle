@@ -109,4 +109,7 @@ dependencies {
 
     // Swipe Refresh
     implementation 'com.google.accompanist:accompanist-swiperefresh:0.27.0'
+
+    // State
+    implementation 'io.github.ahmad-hamwi:tabsync-compose:1.0.0'
 }

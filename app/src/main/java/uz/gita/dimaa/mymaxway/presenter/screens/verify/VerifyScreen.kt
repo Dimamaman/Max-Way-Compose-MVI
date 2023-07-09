@@ -26,6 +26,7 @@ import uz.gita.dimaa.mymaxway.presenter.screens.login.LoginScreenContract
 import uz.gita.dimaa.mymaxway.presenter.screens.login.component.CommonLoginButton
 import uz.gita.dimaa.mymaxway.presenter.screens.login.component.CommonText
 import uz.gita.dimaa.mymaxway.theme.LightGrayColor
+import uz.gita.dimaa.mymaxway.theme.dark_grey
 import uz.gita.dimaa.mymaxway.util.OtpView
 
 class VerifyScreen : AppScreen() {
@@ -57,7 +58,7 @@ fun VerifyScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            CommonText(text = "Enter SMS code,", fontSize = 34.sp, fontWeight = FontWeight.Normal,color = LightGrayColor) {}
+            CommonText(text = "Enter SMS code,", fontSize = 34.sp, fontWeight = FontWeight.Normal,color = dark_grey) {}
             Spacer(modifier = Modifier.height(5.dp))
 
             Spacer(modifier = Modifier.height(20.dp))

@@ -9,7 +9,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import uz.gita.dimaa.mymaxway.data.local.room.dao.FoodDao
 import uz.gita.dimaa.mymaxway.data.local.room.database.FoodDatabase
-import uz.gita.dimaa.mymaxway.domain.model.FoodData
 import javax.inject.Singleton
 
 @Module

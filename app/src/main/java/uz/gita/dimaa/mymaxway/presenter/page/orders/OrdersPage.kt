@@ -23,9 +23,7 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import org.orbitmvi.orbit.compose.collectAsState
 import uz.gita.dimaa.mymaxway.R
-import uz.gita.dimaa.mymaxway.data.local.room.entity.FoodEntity
 import uz.gita.dimaa.mymaxway.data.model.OrderData
-import uz.gita.dimaa.mymaxway.theme.LightGrayColor
 
 class OrdersPage : Tab, AndroidScreen() {
     override val options: TabOptions
@@ -99,7 +97,7 @@ fun OrderPageContent(
                                 .size(150.dp)
                         )
                         Text(
-                            text = "Buyurtma mavjud emas",
+                            text = "Orders is empty",
                             modifier = Modifier,
                             color = Color.Gray,
                             fontSize = 12.sp,
@@ -178,7 +176,6 @@ fun OrderPageContent(
                                 }
                             }
                         }
-
                     }
                 }
 
@@ -213,12 +210,4 @@ fun TopAppBar() {
             )
         }
     }
-}
-
-private fun getAllPrice(list: List<FoodEntity>): Long {
-    var p = 0L
-    list.forEach {
-        p += it.price * it.count
-    }
-    return p
 }

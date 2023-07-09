@@ -16,14 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import uz.gita.dimaa.mymaxway.R
 import uz.gita.dimaa.mymaxway.data.local.room.entity.FoodEntity
-import uz.gita.dimaa.mymaxway.presenter.page.home.HomeContract
 import uz.gita.dimaa.mymaxway.presenter.screens.busket.BasketContract
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
@@ -73,7 +71,7 @@ fun OrdersFoodItem(
             }
 
             Column(
-                modifier = Modifier.padding(vertical = 5.dp),
+                modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 

@@ -1,6 +1,5 @@
 package uz.gita.dimaa.mymaxway.presenter.page.home
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,8 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.androidx.AndroidScreen
 import cafe.adriel.voyager.hilt.getViewModel
 import cafe.adriel.voyager.navigator.tab.Tab
@@ -34,8 +35,8 @@ import uz.gita.dimaa.mymaxway.R
 import uz.gita.dimaa.mymaxway.domain.model.FoodData
 import uz.gita.dimaa.mymaxway.presenter.components.CustomSearchView
 import uz.gita.dimaa.mymaxway.presenter.components.FoodItem
-import uz.gita.dimaa.mymaxway.presenter.components.FoodItemOne
 import uz.gita.dimaa.mymaxway.theme.LightGrayColor
+import uz.gita.dimaa.mymaxway.theme.dark_grey
 
 class HomePage : Tab, AndroidScreen() {
     override val options: TabOptions
@@ -79,7 +80,8 @@ fun HomePageContent(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
         ) {
             CustomSearchView(modifier = Modifier.weight(1f), search = search) {
                 search = it
@@ -88,7 +90,7 @@ fun HomePageContent(
 
             Image(
                 modifier = Modifier
-                    .padding(end = 8.dp, top = 8.dp)
+                    .padding(start = 5.dp)
                     .size(30.dp)
                     .clickable(interactionSource = MutableInteractionSource(),
                         indication = rememberRipple(
@@ -103,7 +105,7 @@ fun HomePageContent(
 
         }
 
-        LazyRow(modifier = Modifier.padding(top = 8.dp)) {
+        LazyRow(modifier = Modifier.padding(top = 2.dp)) {
             item { Spacer(modifier = Modifier.width(10.dp)) }
             items(uiState.value.categories.size) {
                 Button(
@@ -120,7 +122,7 @@ fun HomePageContent(
             }
         }
 
-        
+
         SwipeRefresh(state = swipeRefreshState, onRefresh = {
             onEventDispatcher.invoke(HomeContract.Intent.Loading)
         }) {
@@ -142,7 +144,7 @@ fun HomePageContent(
             CircularProgressIndicator(
                 modifier = Modifier.size(45.dp),
                 strokeWidth = 5.dp,
-                color = Color(0xFFF80358)
+                color = dark_grey
             )
         }
     }
@@ -156,7 +158,11 @@ fun HomePageContent(
 }
 
 @Composable
-fun BottomSheet(foodData: FoodData, count: Int, onEventDispatcher: (HomeContract.Intent) -> Unit) {
+fun BottomSheet(
+    foodData: FoodData,
+    count: Int,
+    onEventDispatcher: (HomeContract.Intent) -> Unit,
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -172,6 +178,7 @@ fun BottomSheet(foodData: FoodData, count: Int, onEventDispatcher: (HomeContract
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
                 text = "25 - 30 min",
+                fontWeight = FontWeight.Bold
             )
 
             Button(modifier = Modifier.weight(1f), onClick = {
@@ -184,7 +191,8 @@ fun BottomSheet(foodData: FoodData, count: Int, onEventDispatcher: (HomeContract
             Text(
                 modifier = Modifier.weight(1f),
                 text = "${foodData.price * count} swm",
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold
             )
         }
     }

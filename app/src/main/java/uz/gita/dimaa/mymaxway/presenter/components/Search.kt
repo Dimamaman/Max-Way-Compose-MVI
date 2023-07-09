@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import uz.gita.dimaa.mymaxway.R
 
@@ -24,12 +25,8 @@ fun CustomSearchView(
 
     Box(
         modifier = modifier
-            .padding(top = 8.dp)
             .height(50.dp)
-            .padding(horizontal = 10.dp)
             .clip(RoundedCornerShape(8.dp))
-
-
     ) {
         val trailingIconView = @Composable {
             IconButton(
@@ -65,4 +62,10 @@ fun CustomSearchView(
             placeholder = { Text(text = "Search...", color = Color.Gray) }
         )
     }
+}
+
+@Preview
+@Composable
+fun CustomSearchViewPreview() {
+    CustomSearchView(search = "Search", onValueChange = {})
 }

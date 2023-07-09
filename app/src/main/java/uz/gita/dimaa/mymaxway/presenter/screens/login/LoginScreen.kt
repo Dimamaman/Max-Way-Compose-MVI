@@ -23,7 +23,7 @@ import uz.gita.dimaa.mymaxway.navigation.AppScreen
 import uz.gita.dimaa.mymaxway.presenter.screens.login.component.CommonLoginButton
 import uz.gita.dimaa.mymaxway.presenter.screens.login.component.CommonText
 import uz.gita.dimaa.mymaxway.presenter.screens.login.component.CommonTextField
-import uz.gita.dimaa.mymaxway.theme.LightGrayColor
+import uz.gita.dimaa.mymaxway.theme.dark_grey
 
 class LoginScreen : AppScreen() {
     @Composable
@@ -70,7 +70,7 @@ fun LoginScreenContent(
                 CommonText(
                     text = "Sign in to continue!",
                     fontSize = 28.sp,
-                    color = LightGrayColor
+                    color = dark_grey
                 ) {}
             }
             Spacer(modifier = Modifier.height(60.dp))

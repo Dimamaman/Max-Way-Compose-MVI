@@ -4,7 +4,6 @@ import kotlinx.coroutines.flow.StateFlow
 import org.orbitmvi.orbit.ContainerHost
 import uz.gita.dimaa.mymaxway.data.local.room.entity.FoodEntity
 import uz.gita.dimaa.mymaxway.domain.model.FoodData
-import uz.gita.dimaa.mymaxway.presenter.screens.busket.BasketContract
 
 interface HomeContract {
     sealed interface Intent {
