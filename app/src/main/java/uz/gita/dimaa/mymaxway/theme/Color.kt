@@ -17,3 +17,5 @@ val LightGrayColor = Color(0xFFF1F1F1)
 val DialogColor = Color(0xFFE2ECF3)
 
 val dark_grey = Color(0xFF818C99)
+
+val CategoryBackGround = Color(0xFF6650a4)

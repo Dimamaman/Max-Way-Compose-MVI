@@ -22,7 +22,8 @@ interface HomeContract {
         val isEmpty: Boolean = false,
         val foods: List<FoodData> = emptyList(),
         val categories: List<String> = emptyList(),
-        val isRefreshing: Boolean = true
+        val isRefreshing: Boolean = true,
+        val isInternetAvailable: Boolean
     )
 
     sealed interface SideEffect {

@@ -1,6 +1,6 @@
 package uz.gita.dimaa.mymaxway.presenter.page.home
 
-import android.util.Log
+import android.widget.Button
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,15 +12,13 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,10 +31,15 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import uz.gita.dimaa.mymaxway.R
+import uz.gita.dimaa.mymaxway.app.App
+import uz.gita.dimaa.mymaxway.connection.ConnectivityObserver
+import uz.gita.dimaa.mymaxway.connection.NetworkConnectivityObserver
 import uz.gita.dimaa.mymaxway.domain.model.FoodData
 import uz.gita.dimaa.mymaxway.presenter.components.CustomSearchView
 import uz.gita.dimaa.mymaxway.presenter.components.FoodItem
+import uz.gita.dimaa.mymaxway.theme.CategoryBackGround
 import uz.gita.dimaa.mymaxway.theme.LightGrayColor
+import uz.gita.dimaa.mymaxway.theme.PurpleGrey80
 import uz.gita.dimaa.mymaxway.theme.dark_grey
 
 class HomePage : Tab, AndroidScreen() {
@@ -52,12 +55,60 @@ class HomePage : Tab, AndroidScreen() {
             }
         }
 
+
+    private lateinit var connectivityObserver: ConnectivityObserver
+
     @Composable
     override fun Content() {
-        val viewModel: HomeContract.ViewModel = getViewModel<HomePageViewModel>()
-        val uiState = viewModel.uiState.collectAsState()
 
-        HomePageContent(uiState, viewModel::onEventDispatcher)
+        connectivityObserver = NetworkConnectivityObserver(App.instance.applicationContext)
+
+        val status by connectivityObserver.observe()
+            .collectAsState(initial = ConnectivityObserver.Status.Unavailable)
+
+        when(status) {
+            ConnectivityObserver.Status.Unavailable -> {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(painter = painterResource(id = R.drawable.no_wifi), contentDescription = "")
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(text = "No Internet Connection")
+                }
+            }
+
+            ConnectivityObserver.Status.Available -> {
+                val viewModel: HomeContract.ViewModel = getViewModel<HomePageViewModel>()
+                val uiState = viewModel.uiState.collectAsState()
+
+                HomePageContent(uiState, viewModel::onEventDispatcher)
+            }
+
+            ConnectivityObserver.Status.Lost -> {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(painter = painterResource(id = R.drawable.no_wifi), contentDescription = "")
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(text = "No Internet Connection")
+                }
+            }
+            ConnectivityObserver.Status.Losing -> {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(painter = painterResource(id = R.drawable.no_wifi), contentDescription = "")
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(text = "No Internet Connection")
+                }
+            }
+        }
     }
 }
 
@@ -65,15 +116,15 @@ class HomePage : Tab, AndroidScreen() {
 fun HomePageContent(
     uiState: State<HomeContract.UIState>, onEventDispatcher: (HomeContract.Intent) -> Unit
 ) {
-
+    val context = LocalContext.current
     var search by remember { mutableStateOf("") }
     var count by remember { mutableStateOf(0) }
     var foodData by remember { mutableStateOf(FoodData()) }
     var dialogState by remember { mutableStateOf(false) }
     val isLoading by remember { mutableStateOf(uiState.value.isRefreshing) }
-    val loading by remember { mutableStateOf(uiState.value.loading) }
-
+    var loading by remember { mutableStateOf(uiState.value.loading) }
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
+    var categoryName by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -110,33 +161,52 @@ fun HomePageContent(
         LazyRow(modifier = Modifier.padding(top = 2.dp)) {
             item { Spacer(modifier = Modifier.width(10.dp)) }
             items(uiState.value.categories.size) {
+                var categoryButtonColor by remember { mutableStateOf(false) }
                 Button(
                     onClick = {
+                        categoryButtonColor = !categoryButtonColor
                         onEventDispatcher.invoke(HomeContract.Intent.SearchByCategory(uiState.value.categories[it]))
+                        categoryName = uiState.value.categories[it]
+                        if (!categoryButtonColor) {
+                            onEventDispatcher.invoke(HomeContract.Intent.Loading)
+                        }
                     },
                     modifier = Modifier
                         .padding(horizontal = 2.dp)
                         .clip(RoundedCornerShape(1.dp)),
                     shape = MaterialTheme.shapes.small,
+                    colors = ButtonDefaults.buttonColors(if (categoryButtonColor && categoryName == uiState.value.categories[it]) PurpleGrey80 else CategoryBackGround)
                 ) {
                     Text(text = uiState.value.categories[it])
                 }
             }
         }
 
-
         SwipeRefresh(state = swipeRefreshState, onRefresh = {
             onEventDispatcher.invoke(HomeContract.Intent.Loading)
         }) {
-            LazyVerticalGrid(columns = GridCells.Fixed(2), content = {
-                items(uiState.value.foods) { food ->
-                    FoodItem(food = food, onEventDispatcher) {
-                        dialogState = true
-                        foodData = food
-                        count = it
-                    }
+
+            if (uiState.value.isInternetAvailable) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(painter = painterResource(id = R.drawable.no_wifi), contentDescription = "")
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(text = "No Internet")
                 }
-            })
+            } else {
+                LazyVerticalGrid(columns = GridCells.Fixed(2), content = {
+                    items(uiState.value.foods) { food ->
+                        FoodItem(food = food, onEventDispatcher) {
+                            dialogState = true
+                            foodData = food
+                            count = it
+                        }
+                    }
+                })
+            }
         }
     }
 

@@ -11,6 +11,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import uz.gita.dimaa.mymaxway.data.local.sharedPref.SharedPref
 import uz.gita.dimaa.mymaxway.domain.repository.roomrepository.RoomRepository
 import uz.gita.dimaa.mymaxway.domain.usecase.HomeUseCase
+import uz.gita.dimaa.mymaxway.util.hasConnection
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,9 +22,9 @@ class HomePageViewModel @Inject constructor(
     private val sharedPref: SharedPref
 ) : HomeContract.ViewModel, ViewModel() {
     override val container =
-        container<HomeContract.UIState, HomeContract.SideEffect>(HomeContract.UIState())
+        container<HomeContract.UIState, HomeContract.SideEffect>(HomeContract.UIState(isInternetAvailable = false))
 
-    override val uiState = MutableStateFlow(HomeContract.UIState())
+    override val uiState = MutableStateFlow(HomeContract.UIState(isInternetAvailable = false))
 
     init {
         onEventDispatcher(HomeContract.Intent.Loading)
@@ -32,33 +33,40 @@ class HomePageViewModel @Inject constructor(
     override fun onEventDispatcher(intent: HomeContract.Intent) {
         when (intent) {
             is HomeContract.Intent.Loading -> {
-                uiState.update {
-                    it.copy(isRefreshing = false, loading = true)
-                }
-                viewModelScope.launch {
-                    homeUseCase.getFoods().onSuccess { list ->
-                        uiState.update {
-                            it.copy(foods = list,loading = false)
-                        }
 
-                        uiState.update {
-                            it.copy(isRefreshing = true,loading = false)
-                        }
-                    }.onFailure {
+                if (hasConnection()) {
+                    uiState.update {
+                        it.copy(isRefreshing = false, loading = true, isInternetAvailable = false)
+                    }
+                    viewModelScope.launch {
+                        homeUseCase.getFoods().onSuccess { list ->
+                            uiState.update {
+                                it.copy(foods = list,loading = false)
+                            }
 
+                            uiState.update {
+                                it.copy(isRefreshing = true,loading = false)
+                            }
+                        }.onFailure {
+
+                        }
+                    }
+
+                    homeUseCase.getCategories().onEach {
+                        it.onSuccess { categoryName ->
+                            uiState.update {
+                                it.copy(categories = categoryName, isRefreshing = false,loading = false)
+                            }
+                        }
+                        it.onFailure {
+
+                        }
+                    }.launchIn(viewModelScope)
+                } else {
+                    uiState.update {
+                        it.copy(isInternetAvailable = true,isRefreshing = false, loading = false)
                     }
                 }
-
-                homeUseCase.getCategories().onEach {
-                    it.onSuccess { categoryName ->
-                        uiState.update {
-                            it.copy(categories = categoryName, isRefreshing = false,loading = false)
-                        }
-                    }
-                    it.onFailure {
-
-                    }
-                }.launchIn(viewModelScope)
             }
 
             is HomeContract.Intent.Search -> {
